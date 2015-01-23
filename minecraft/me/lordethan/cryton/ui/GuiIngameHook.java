@@ -29,7 +29,7 @@ public class GuiIngameHook extends GuiIngame{
 			
 			if(m.getState()){
 				Wrapper.fr.drawString(m.getName(), 2, yCount, 0x00ff7f);
-				yCount ++;
+				yCount +=10;
 			}
 		}
 	}
