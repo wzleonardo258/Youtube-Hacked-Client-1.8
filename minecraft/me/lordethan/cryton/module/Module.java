@@ -35,7 +35,7 @@ public class Module {
 			this.onEnable();
 			this.isEnabled = true;
 		}else{
-			this.onDissable();
+			this.onDisable();
 			this.isEnabled = false;
 		}
 	}
@@ -46,7 +46,7 @@ public class Module {
 	
 	public void onToggle(){}
 	public void onEnable(){}
-	public void onDissable(){}
+	public void onDisable(){}
 	public void onUpdate(){}
 	public void onRender(){}
 	

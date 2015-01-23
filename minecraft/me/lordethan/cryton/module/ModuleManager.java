@@ -12,6 +12,7 @@ public class ModuleManager {
 		this.activeModules.add(new Sprint());
 		this.activeModules.add(new FullBright());
 		this.activeModules.add(new KillAura());
+		this.activeModules.add(new Flight());
 	}
 
 }
