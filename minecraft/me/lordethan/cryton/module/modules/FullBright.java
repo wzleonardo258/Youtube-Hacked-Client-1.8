@@ -6,16 +6,16 @@ import me.lordethan.cryton.utils.Wrapper;
 
 import org.lwjgl.input.Keyboard;
 
-public class FullBright extends Module{
+public class FullBright extends Module {
 
 	public FullBright() {
 		super("FullBright", Keyboard.KEY_V, Category.WORLD);
 	}
-	
-	public void onUpdate(){
-		if(this.getState()){
+
+	public void onUpdate() {
+		if (this.getState()) {
 			Wrapper.mc.gameSettings.gammaSetting = 10f;
-		}else{
+		} else {
 			Wrapper.mc.gameSettings.gammaSetting = 1f;
 		}
 	}

@@ -6,21 +6,18 @@ import me.lordethan.cryton.utils.Wrapper;
 
 import org.lwjgl.input.Keyboard;
 
-public class Flight extends Module {
-
-	public Flight() {
-		super("Flight", Keyboard.KEY_F, Category.PLAYER);
+public class FastPlace extends Module {
+	public FastPlace() {
+		super("Fastplace", Keyboard.KEY_PERIOD, Category.PLAYER);
 	}
 
 	public void onUpdate() {
-		if (!this.getState()) {
-			return;
+		if (this.getState()) {
+			Wrapper.mc.rightClickDelayTimer = 0;
 		}
-		Wrapper.mc.thePlayer.capabilities.isFlying = true;
 	}
 
 	public void onDisable() {
-		Wrapper.mc.thePlayer.capabilities.isFlying = false;
+		Wrapper.mc.rightClickDelayTimer = 6;
 	}
-
 }

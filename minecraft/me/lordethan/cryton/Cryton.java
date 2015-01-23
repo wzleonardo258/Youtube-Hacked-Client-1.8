@@ -5,15 +5,15 @@ import me.lordethan.cryton.module.ModuleManager;
 import org.lwjgl.opengl.Display;
 
 public class Cryton {
-	
+
 	private static String Client_Name = "Cryton";
 	private static double Client_Vesion = 1.0;
-	
+
 	public static final Cryton theClient = new Cryton();
-	
+
 	public static ModuleManager moduleManager;
-	
-	public static void StartClient(){
+
+	public static void StartClient() {
 		moduleManager = new ModuleManager();
 		Display.setTitle(getClient_Name() + " (rel-" + getClient_Vesion() + ")");
 	}
@@ -33,8 +33,5 @@ public class Cryton {
 	public static void setClient_Vesion(double client_Vesion) {
 		Client_Vesion = client_Vesion;
 	}
-	
-	
-	
 
 }

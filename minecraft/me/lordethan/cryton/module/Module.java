@@ -1,13 +1,13 @@
 package me.lordethan.cryton.module;
 
 public class Module {
-	
+
 	private String name;
 	private int bind;
 	private Category category;
 	private boolean isEnabled;
-	
-	public Module(String name, int bind, Category category){
+
+	public Module(String name, int bind, Category category) {
 		this.name = name;
 		this.bind = bind;
 		this.category = category;
@@ -24,31 +24,39 @@ public class Module {
 	public Category getCategory() {
 		return category;
 	}
-	
-	public boolean getState(){
+
+	public boolean getState() {
 		return isEnabled;
 	}
-	
-	public void setState(boolean state){
+
+	public void setState(boolean state) {
 		this.onToggle();
-		if(state){
+		if (state) {
 			this.onEnable();
 			this.isEnabled = true;
-		}else{
+		} else {
 			this.onDisable();
 			this.isEnabled = false;
 		}
 	}
-	
-	public void toggleModule(){
+
+	public void toggleModule() {
 		this.setState(!this.getState());
 	}
-	
-	public void onToggle(){}
-	public void onEnable(){}
-	public void onDisable(){}
-	public void onUpdate(){}
-	public void onRender(){}
-	
+
+	public void onToggle() {
+	}
+
+	public void onEnable() {
+	}
+
+	public void onDisable() {
+	}
+
+	public void onUpdate() {
+	}
+
+	public void onRender() {
+	}
 
 }
