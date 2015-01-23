@@ -2,7 +2,7 @@ package me.lordethan.cryton.module;
 
 import java.util.ArrayList;
 
-import me.lordethan.cryton.module.modules.Sprint;
+import me.lordethan.cryton.module.modules.*;
 
 public class ModuleManager {
 	
@@ -10,6 +10,8 @@ public class ModuleManager {
 	
 	public ModuleManager(){
 		this.activeModules.add(new Sprint());
+		this.activeModules.add(new FullBright());
+		this.activeModules.add(new KillAura());
 	}
 
 }
