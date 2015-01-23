@@ -46,8 +46,9 @@ public class JsonSerializableSet extends ForwardingSet implements IJsonSerializa
         return var1;
     }
 
-    protected Set delegate()
-    {
-        return this.underlyingSet;
-    }
+	@Override
+	protected Set delegate() {
+		return this.delegate();
+	}
+
 }

@@ -15,9 +15,11 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
+import net.minecraft.src.BlockPosM;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 
@@ -38,9 +40,11 @@ public class RenderChunk
     private int field_178595_m;
     private boolean field_178593_n;
     private static final String __OBFID = "CL_00002452";
+    private BlockPos[] positionOffsets16;
 
-    public RenderChunk(World worldIn, RenderGlobal p_i46197_2_, BlockPos p_i46197_3_, int p_i46197_4_)
+    public RenderChunk(World worldIn, RenderGlobal renderGlobalIn, BlockPos blockPosIn, int indexIn)
     {
+        this.positionOffsets16 = new BlockPos[EnumFacing.VALUES.length];
         this.field_178590_b = CompiledChunk.field_178502_a;
         this.field_178587_g = new ReentrantLock();
         this.field_178598_h = new ReentrantLock();
@@ -50,12 +54,12 @@ public class RenderChunk
         this.field_178595_m = -1;
         this.field_178593_n = true;
         this.field_178588_d = worldIn;
-        this.field_178589_e = p_i46197_2_;
-        this.field_178596_j = p_i46197_4_;
+        this.field_178589_e = renderGlobalIn;
+        this.field_178596_j = indexIn;
 
-        if (!p_i46197_3_.equals(this.func_178568_j()))
+        if (!blockPosIn.equals(this.func_178568_j()))
         {
-            this.func_178576_a(p_i46197_3_);
+            this.func_178576_a(blockPosIn);
         }
 
         if (OpenGlHelper.func_176075_f())
@@ -67,15 +71,15 @@ public class RenderChunk
         }
     }
 
-    public boolean func_178577_a(int p_178577_1_)
+    public boolean func_178577_a(int frameIndexIn)
     {
-        if (this.field_178595_m == p_178577_1_)
+        if (this.field_178595_m == frameIndexIn)
         {
             return false;
         }
         else
         {
-            this.field_178595_m = p_178577_1_;
+            this.field_178595_m = frameIndexIn;
             return true;
         }
     }
@@ -91,6 +95,11 @@ public class RenderChunk
         this.field_178586_f = p_178576_1_;
         this.field_178591_c = new AxisAlignedBB(p_178576_1_, p_178576_1_.add(16, 16, 16));
         this.func_178567_n();
+
+        for (int i = 0; i < this.positionOffsets16.length; ++i)
+        {
+            this.positionOffsets16[i] = null;
+        }
     }
 
     public void func_178570_a(float p_178570_1_, float p_178570_2_, float p_178570_3_, ChunkCompileTaskGenerator p_178570_4_)
@@ -99,9 +108,10 @@ public class RenderChunk
 
         if (var5.func_178487_c() != null && !var5.func_178491_b(EnumWorldBlockLayer.TRANSLUCENT))
         {
-            this.func_178573_a(p_178570_4_.func_178545_d().func_179038_a(EnumWorldBlockLayer.TRANSLUCENT), this.field_178586_f);
-            p_178570_4_.func_178545_d().func_179038_a(EnumWorldBlockLayer.TRANSLUCENT).setVertexState(var5.func_178487_c());
-            this.func_178584_a(EnumWorldBlockLayer.TRANSLUCENT, p_178570_1_, p_178570_2_, p_178570_3_, p_178570_4_.func_178545_d().func_179038_a(EnumWorldBlockLayer.TRANSLUCENT), var5);
+            WorldRenderer worldRenderer = p_178570_4_.func_178545_d().func_179038_a(EnumWorldBlockLayer.TRANSLUCENT);
+            this.func_178573_a(worldRenderer, this.field_178586_f);
+            worldRenderer.setVertexState(var5.func_178487_c());
+            this.func_178584_a(EnumWorldBlockLayer.TRANSLUCENT, p_178570_1_, p_178570_2_, p_178570_3_, worldRenderer, var5);
         }
     }
 
@@ -121,6 +131,11 @@ public class RenderChunk
                 return;
             }
 
+            if (this.field_178588_d == null)
+            {
+                return;
+            }
+
             var9 = new RegionRenderCache(this.field_178588_d, var7.add(-1, -1, -1), var8.add(1, 1, 1), 1);
             p_178581_4_.func_178543_a(var5);
         }
@@ -134,59 +149,60 @@ public class RenderChunk
         if (!var9.extendedLevelsInChunkCache())
         {
             ++field_178592_a;
-            Iterator var11 = BlockPos.getAllInBoxMutable(var7, var8).iterator();
+            Iterator var11 = BlockPosM.getAllInBoxMutable(var7, var8).iterator();
+            EnumWorldBlockLayer var231;
 
             while (var11.hasNext())
             {
-                BlockPos.MutableBlockPos var12 = (BlockPos.MutableBlockPos)var11.next();
-                IBlockState var13 = var9.getBlockState(var12);
-                Block var14 = var13.getBlock();
+                BlockPosM var20 = (BlockPosM)var11.next();
+                IBlockState var21 = var9.getBlockState(var20);
+                Block var22 = var21.getBlock();
 
-                if (var14.isOpaqueCube())
+                if (var22.isOpaqueCube())
                 {
-                    var10.func_178606_a(var12);
+                    var10.func_178606_a(var20);
                 }
 
-                if (var14.hasTileEntity())
+                if (var22.hasTileEntity())
                 {
-                    TileEntity var15 = var9.getTileEntity(new BlockPos(var12));
+                    TileEntity var23 = var9.getTileEntity(new BlockPos(var20));
 
-                    if (var15 != null && TileEntityRendererDispatcher.instance.hasSpecialRenderer(var15))
+                    if (var23 != null && TileEntityRendererDispatcher.instance.hasSpecialRenderer(var23))
                     {
-                        var5.func_178490_a(var15);
+                        var5.func_178490_a(var23);
                     }
                 }
 
-                EnumWorldBlockLayer var24 = var14.getBlockLayer();
-                int var16 = var24.ordinal();
+                var231 = var22.getBlockLayer();
+                int var16 = var231.ordinal();
 
-                if (var14.getRenderType() != -1)
+                if (var22.getRenderType() != -1)
                 {
                     WorldRenderer var17 = p_178581_4_.func_178545_d().func_179039_a(var16);
 
-                    if (!var5.func_178492_d(var24))
+                    if (!var5.func_178492_d(var231))
                     {
-                        var5.func_178493_c(var24);
+                        var5.func_178493_c(var231);
                         this.func_178573_a(var17, var7);
                     }
 
-                    if (Minecraft.getMinecraft().getBlockRendererDispatcher().func_175018_a(var13, var12, var9, var17))
+                    if (Minecraft.getMinecraft().getBlockRendererDispatcher().func_175018_a(var21, var20, var9, var17))
                     {
-                        var5.func_178486_a(var24);
+                        var5.func_178486_a(var231);
                     }
                 }
             }
 
-            EnumWorldBlockLayer[] var20 = EnumWorldBlockLayer.values();
-            int var21 = var20.length;
+            EnumWorldBlockLayer[] var201 = EnumWorldBlockLayer.values();
+            int var211 = var201.length;
 
-            for (int var22 = 0; var22 < var21; ++var22)
+            for (int var221 = 0; var221 < var211; ++var221)
             {
-                EnumWorldBlockLayer var23 = var20[var22];
+                var231 = var201[var221];
 
-                if (var5.func_178492_d(var23))
+                if (var5.func_178492_d(var231))
                 {
-                    this.func_178584_a(var23, p_178581_1_, p_178581_2_, p_178581_3_, p_178581_4_.func_178545_d().func_179038_a(var23), var5);
+                    this.func_178584_a(var231, p_178581_1_, p_178581_2_, p_178581_3_, p_178581_4_.func_178545_d().func_179038_a(var231), var5);
                 }
             }
         }
@@ -254,7 +270,8 @@ public class RenderChunk
                 this.field_178599_i = new ChunkCompileTaskGenerator(this, ChunkCompileTaskGenerator.Type.RESORT_TRANSPARENCY);
                 this.field_178599_i.func_178543_a(this.field_178590_b);
                 var1 = this.field_178599_i;
-                return var1;
+                ChunkCompileTaskGenerator var2 = var1;
+                return var2;
             }
 
             var1 = null;
@@ -370,5 +387,19 @@ public class RenderChunk
     public boolean func_178569_m()
     {
         return this.field_178593_n;
+    }
+
+    public BlockPos getPositionOffset16(EnumFacing facing)
+    {
+        int index = facing.getIndex();
+        BlockPos posOffset = this.positionOffsets16[index];
+
+        if (posOffset == null)
+        {
+            posOffset = this.func_178568_j().offset(facing, 16);
+            this.positionOffsets16[index] = posOffset;
+        }
+
+        return posOffset;
     }
 }

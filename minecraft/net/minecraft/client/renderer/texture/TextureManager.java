@@ -12,10 +12,13 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.src.Config;
+import net.minecraft.src.RandomMobs;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
 
 public class TextureManager implements ITickable, IResourceManagerReloadListener
 {
@@ -33,6 +36,11 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
 
     public void bindTexture(ResourceLocation resource)
     {
+        if (Config.isRandomMobs())
+        {
+            resource = RandomMobs.getTextureLocation(resource);
+        }
+
         Object var2 = (ITextureObject)this.mapTextureObjects.get(resource);
 
         if (var2 == null)
@@ -60,11 +68,11 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
     public boolean loadTexture(ResourceLocation p_110579_1_, final ITextureObject p_110579_2_)
     {
         boolean var3 = true;
-        ITextureObject p_110579_2_2 = p_110579_2_;
+        Object p_110579_2_2 = p_110579_2_;
 
         try
         {
-            ((ITextureObject)p_110579_2_).loadTexture(this.theResourceManager);
+            p_110579_2_.loadTexture(this.theResourceManager);
         }
         catch (IOException var8)
         {
@@ -138,14 +146,36 @@ public class TextureManager implements ITickable, IResourceManagerReloadListener
         }
     }
 
-    public void onResourceManagerReload(IResourceManager p_110549_1_)
+    public void onResourceManagerReload(IResourceManager resourceManager)
     {
-        Iterator var2 = this.mapTextureObjects.entrySet().iterator();
+        Config.dbg("*** Reloading textures ***");
+        Config.log("Resource packs: " + Config.getResourcePackNames());
+        Iterator it = this.mapTextureObjects.keySet().iterator();
 
-        while (var2.hasNext())
+        while (it.hasNext())
         {
-            Entry var3 = (Entry)var2.next();
-            this.loadTexture((ResourceLocation)var3.getKey(), (ITextureObject)var3.getValue());
+            ResourceLocation var2 = (ResourceLocation)it.next();
+
+            if (var2.getResourcePath().startsWith("mcpatcher/"))
+            {
+                ITextureObject var3 = (ITextureObject)this.mapTextureObjects.get(var2);
+                int glTexId = var3.getGlTextureId();
+
+                if (glTexId > 0)
+                {
+                    GL11.glDeleteTextures(glTexId);
+                }
+
+                it.remove();
+            }
+        }
+
+        Iterator var21 = this.mapTextureObjects.entrySet().iterator();
+
+        while (var21.hasNext())
+        {
+            Entry var31 = (Entry)var21.next();
+            this.loadTexture((ResourceLocation)var31.getKey(), (ITextureObject)var31.getValue());
         }
     }
 }

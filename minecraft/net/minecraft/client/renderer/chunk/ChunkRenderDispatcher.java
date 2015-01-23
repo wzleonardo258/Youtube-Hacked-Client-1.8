@@ -71,6 +71,7 @@ public class ChunkRenderDispatcher
         {
             boolean var4 = false;
             Queue var5 = this.field_178524_h;
+            Queue var81 = this.field_178524_h;
 
             synchronized (this.field_178524_h)
             {
@@ -140,7 +141,7 @@ public class ChunkRenderDispatcher
             {
                 this.field_178525_i.func_178474_a(var2);
             }
-            catch (InterruptedException var7)
+            catch (InterruptedException var8)
             {
                 ;
             }
@@ -186,12 +187,12 @@ public class ChunkRenderDispatcher
         this.field_178520_e.add(p_178512_1_);
     }
 
-    public RegionRenderCacheBuilder func_178515_c() throws InterruptedException
+    public RegionRenderCacheBuilder func_178515_c() throws InterruptedException, InterruptedException
     {
         return (RegionRenderCacheBuilder)this.field_178520_e.take();
     }
 
-    public ChunkCompileTaskGenerator func_178511_d() throws InterruptedException
+    public ChunkCompileTaskGenerator func_178511_d() throws InterruptedException, InterruptedException
     {
         return (ChunkCompileTaskGenerator)this.field_178519_d.take();
     }
@@ -216,7 +217,8 @@ public class ChunkRenderDispatcher
                     }
                 });
                 var3 = this.field_178519_d.offer(var2);
-                return var3;
+                boolean var4 = var3;
+                return var4;
             }
 
             var3 = true;
@@ -256,6 +258,7 @@ public class ChunkRenderDispatcher
                 }
             }, (Object)null);
             Queue var6 = this.field_178524_h;
+            Queue var7 = this.field_178524_h;
 
             synchronized (this.field_178524_h)
             {
@@ -283,6 +286,14 @@ public class ChunkRenderDispatcher
 
     public void func_178513_e()
     {
-        this.field_178519_d.clear();
+        while (!this.field_178519_d.isEmpty())
+        {
+            ChunkCompileTaskGenerator task = (ChunkCompileTaskGenerator)this.field_178519_d.poll();
+
+            if (task != null)
+            {
+                task.func_178542_e();
+            }
+        }
     }
 }

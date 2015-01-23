@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.Config;
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -84,12 +85,15 @@ public class OpenGlHelper
     public static int field_176089_P;
     public static int anisotropicFilteringMax;
     private static final String __OBFID = "CL_00001179";
+    public static float lastBrightnessX = 0.0F;
+    public static float lastBrightnessY = 0.0F;
 
     /**
      * Initializes the texture constants to be used when rendering lightmap values
      */
     public static void initializeTextures()
     {
+        Config.initDisplay();
         ContextCapabilities var0 = GLContext.getCapabilities();
         field_153215_z = var0.GL_ARB_multitexture && !var0.OpenGL13;
         field_176088_V = var0.GL_ARB_texture_env_combine && !var0.OpenGL13;
@@ -857,6 +861,12 @@ public class OpenGlHelper
         else
         {
             GL13.glMultiTexCoord2f(p_77475_0_, p_77475_1_, p_77475_2_);
+        }
+
+        if (p_77475_0_ == lightmapTexUnit)
+        {
+            lastBrightnessX = p_77475_1_;
+            lastBrightnessY = p_77475_2_;
         }
     }
 

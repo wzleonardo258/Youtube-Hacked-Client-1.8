@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -89,6 +88,11 @@ public class WorldRenderer
 
     public void setVertexState(WorldRenderer.State p_178993_1_)
     {
+        if (p_178993_1_.func_179013_a().length > this.rawIntBuffer.capacity())
+        {
+            this.growBuffer(2097152);
+        }
+
         this.rawIntBuffer.clear();
         this.rawIntBuffer.put(p_178993_1_.func_179013_a());
         this.rawBufferIndex = p_178993_1_.getRawBufferIndex();
@@ -367,11 +371,11 @@ public class WorldRenderer
         }
 
         List var7 = this.vertexFormat.func_177343_g();
-        Iterator var8 = var7.iterator();
+        int listSize = var7.size();
 
-        while (var8.hasNext())
+        for (int i = 0; i < listSize; ++i)
         {
-            VertexFormatElement var9 = (VertexFormatElement)var8.next();
+            VertexFormatElement var9 = (VertexFormatElement)var7.get(i);
             int var10 = var9.func_177373_a() >> 2;
             int var11 = this.rawBufferIndex + var10;
 
@@ -437,15 +441,15 @@ public class WorldRenderer
     {
         if (!this.vertexFormat.func_177350_b())
         {
-            VertexFormatElement var4 = new VertexFormatElement(0, VertexFormatElement.EnumType.BYTE, VertexFormatElement.EnumUseage.NORMAL, 3);
-            this.vertexFormat.func_177349_a(var4);
+            VertexFormatElement var7 = new VertexFormatElement(0, VertexFormatElement.EnumType.BYTE, VertexFormatElement.EnumUseage.NORMAL, 3);
+            this.vertexFormat.func_177349_a(var7);
             this.vertexFormat.func_177349_a(new VertexFormatElement(0, VertexFormatElement.EnumType.UBYTE, VertexFormatElement.EnumUseage.PADDING, 1));
         }
 
-        byte var7 = (byte)((int)(p_178980_1_ * 127.0F));
+        byte var71 = (byte)((int)(p_178980_1_ * 127.0F));
         byte var5 = (byte)((int)(p_178980_2_ * 127.0F));
         byte var6 = (byte)((int)(p_178980_3_ * 127.0F));
-        this.field_179003_o = var7 & 255 | (var5 & 255) << 8 | (var6 & 255) << 16;
+        this.field_179003_o = var71 & 255 | (var5 & 255) << 8 | (var6 & 255) << 16;
     }
 
     public void func_178975_e(float p_178975_1_, float p_178975_2_, float p_178975_3_)

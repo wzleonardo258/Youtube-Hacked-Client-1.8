@@ -17,31 +17,31 @@ public class FaceBakery
     private static final double field_178417_b = 1.0D / Math.cos((Math.PI / 4D)) - 1.0D;
     private static final String __OBFID = "CL_00002490";
 
-    public BakedQuad func_178414_a(Vector3f p_178414_1_, Vector3f p_178414_2_, BlockPartFace p_178414_3_, TextureAtlasSprite p_178414_4_, EnumFacing p_178414_5_, ModelRotation p_178414_6_, BlockPartRotation p_178414_7_, boolean p_178414_8_, boolean p_178414_9_)
+    public BakedQuad func_178414_a(Vector3f posFrom, Vector3f posTo, BlockPartFace face, TextureAtlasSprite sprite, EnumFacing facing, ModelRotation modelRotationIn, BlockPartRotation partRotation, boolean uvLocked, boolean shade)
     {
-        int[] var10 = this.func_178405_a(p_178414_3_, p_178414_4_, p_178414_5_, this.func_178403_a(p_178414_1_, p_178414_2_), p_178414_6_, p_178414_7_, p_178414_8_, p_178414_9_);
+        int[] var10 = this.func_178405_a(face, sprite, facing, this.func_178403_a(posFrom, posTo), modelRotationIn, partRotation, uvLocked, shade);
         EnumFacing var11 = func_178410_a(var10);
 
-        if (p_178414_8_)
+        if (uvLocked)
         {
-            this.func_178409_a(var10, var11, p_178414_3_.field_178243_e, p_178414_4_);
+            this.func_178409_a(var10, var11, face.field_178243_e, sprite);
         }
 
-        if (p_178414_7_ == null)
+        if (partRotation == null)
         {
             this.func_178408_a(var10, var11);
         }
 
-        return new BakedQuad(var10, p_178414_3_.field_178245_c, var11);
+        return new BakedQuad(var10, face.field_178245_c, var11, sprite);
     }
 
-    private int[] func_178405_a(BlockPartFace p_178405_1_, TextureAtlasSprite p_178405_2_, EnumFacing p_178405_3_, float[] p_178405_4_, ModelRotation p_178405_5_, BlockPartRotation p_178405_6_, boolean p_178405_7_, boolean p_178405_8_)
+    private int[] func_178405_a(BlockPartFace p_178405_1_, TextureAtlasSprite p_178405_2_, EnumFacing p_178405_3_, float[] p_178405_4_, ModelRotation p_178405_5_, BlockPartRotation p_178405_6_, boolean p_178405_7_, boolean shade)
     {
         int[] var9 = new int[28];
 
         for (int var10 = 0; var10 < 4; ++var10)
         {
-            this.func_178402_a(var9, var10, p_178405_3_, p_178405_1_, p_178405_4_, p_178405_2_, p_178405_5_, p_178405_6_, p_178405_7_, p_178405_8_);
+            this.func_178402_a(var9, var10, p_178405_3_, p_178405_1_, p_178405_4_, p_178405_2_, p_178405_5_, p_178405_6_, p_178405_7_, shade);
         }
 
         return var9;
@@ -77,38 +77,38 @@ public class FaceBakery
         }
     }
 
-    private float[] func_178403_a(Vector3f p_178403_1_, Vector3f p_178403_2_)
+    private float[] func_178403_a(Vector3f pos1, Vector3f pos2)
     {
         float[] var3 = new float[EnumFacing.values().length];
-        var3[EnumFaceing.Constants.field_179176_f] = p_178403_1_.x / 16.0F;
-        var3[EnumFaceing.Constants.field_179178_e] = p_178403_1_.y / 16.0F;
-        var3[EnumFaceing.Constants.field_179177_d] = p_178403_1_.z / 16.0F;
-        var3[EnumFaceing.Constants.field_179180_c] = p_178403_2_.x / 16.0F;
-        var3[EnumFaceing.Constants.field_179179_b] = p_178403_2_.y / 16.0F;
-        var3[EnumFaceing.Constants.field_179181_a] = p_178403_2_.z / 16.0F;
+        var3[EnumFaceing.Constants.field_179176_f] = pos1.x / 16.0F;
+        var3[EnumFaceing.Constants.field_179178_e] = pos1.y / 16.0F;
+        var3[EnumFaceing.Constants.field_179177_d] = pos1.z / 16.0F;
+        var3[EnumFaceing.Constants.field_179180_c] = pos2.x / 16.0F;
+        var3[EnumFaceing.Constants.field_179179_b] = pos2.y / 16.0F;
+        var3[EnumFaceing.Constants.field_179181_a] = pos2.z / 16.0F;
         return var3;
     }
 
-    private void func_178402_a(int[] p_178402_1_, int p_178402_2_, EnumFacing p_178402_3_, BlockPartFace p_178402_4_, float[] p_178402_5_, TextureAtlasSprite p_178402_6_, ModelRotation p_178402_7_, BlockPartRotation p_178402_8_, boolean p_178402_9_, boolean p_178402_10_)
+    private void func_178402_a(int[] faceData, int vertexIndex, EnumFacing facing, BlockPartFace partFace, float[] p_178402_5_, TextureAtlasSprite sprite, ModelRotation modelRotationIn, BlockPartRotation partRotation, boolean uvLocked, boolean shade)
     {
-        EnumFacing var11 = p_178402_7_.func_177523_a(p_178402_3_);
-        int var12 = p_178402_10_ ? this.func_178413_a(var11) : -1;
-        EnumFaceing.VertexInformation var13 = EnumFaceing.func_179027_a(p_178402_3_).func_179025_a(p_178402_2_);
+        EnumFacing var11 = modelRotationIn.func_177523_a(facing);
+        int var12 = shade ? this.func_178413_a(var11) : -1;
+        EnumFaceing.VertexInformation var13 = EnumFaceing.func_179027_a(facing).func_179025_a(vertexIndex);
         Vector3d var14 = new Vector3d((double)p_178402_5_[var13.field_179184_a], (double)p_178402_5_[var13.field_179182_b], (double)p_178402_5_[var13.field_179183_c]);
-        this.func_178407_a(var14, p_178402_8_);
-        int var15 = this.func_178415_a(var14, p_178402_3_, p_178402_2_, p_178402_7_, p_178402_9_);
-        this.func_178404_a(p_178402_1_, var15, p_178402_2_, var14, var12, p_178402_6_, p_178402_4_.field_178243_e);
+        this.func_178407_a(var14, partRotation);
+        int var15 = this.func_178415_a(var14, facing, vertexIndex, modelRotationIn, uvLocked);
+        this.func_178404_a(faceData, var15, vertexIndex, var14, var12, sprite, partFace.field_178243_e);
     }
 
-    private void func_178404_a(int[] p_178404_1_, int p_178404_2_, int p_178404_3_, Vector3d p_178404_4_, int p_178404_5_, TextureAtlasSprite p_178404_6_, BlockFaceUV p_178404_7_)
+    private void func_178404_a(int[] faceData, int storeIndex, int vertexIndex, Vector3d position, int shadeColor, TextureAtlasSprite sprite, BlockFaceUV faceUV)
     {
-        int var8 = p_178404_2_ * 7;
-        p_178404_1_[var8] = Float.floatToRawIntBits((float)p_178404_4_.x);
-        p_178404_1_[var8 + 1] = Float.floatToRawIntBits((float)p_178404_4_.y);
-        p_178404_1_[var8 + 2] = Float.floatToRawIntBits((float)p_178404_4_.z);
-        p_178404_1_[var8 + 3] = p_178404_5_;
-        p_178404_1_[var8 + 4] = Float.floatToRawIntBits(p_178404_6_.getInterpolatedU((double)p_178404_7_.func_178348_a(p_178404_3_)));
-        p_178404_1_[var8 + 4 + 1] = Float.floatToRawIntBits(p_178404_6_.getInterpolatedV((double)p_178404_7_.func_178346_b(p_178404_3_)));
+        int var8 = storeIndex * 7;
+        faceData[var8] = Float.floatToRawIntBits((float)position.x);
+        faceData[var8 + 1] = Float.floatToRawIntBits((float)position.y);
+        faceData[var8 + 2] = Float.floatToRawIntBits((float)position.z);
+        faceData[var8 + 3] = shadeColor;
+        faceData[var8 + 4] = Float.floatToRawIntBits(sprite.getInterpolatedU((double)faceUV.func_178348_a(vertexIndex)));
+        faceData[var8 + 4 + 1] = Float.floatToRawIntBits(sprite.getInterpolatedV((double)faceUV.func_178346_b(vertexIndex)));
     }
 
     private void func_178407_a(Vector3d p_178407_1_, BlockPartRotation p_178407_2_)
@@ -157,27 +157,27 @@ public class FaceBakery
         }
     }
 
-    public int func_178415_a(Vector3d p_178415_1_, EnumFacing p_178415_2_, int p_178415_3_, ModelRotation p_178415_4_, boolean p_178415_5_)
+    public int func_178415_a(Vector3d position, EnumFacing facing, int vertexIndex, ModelRotation modelRotationIn, boolean uvLocked)
     {
-        if (p_178415_4_ == ModelRotation.X0_Y0)
+        if (modelRotationIn == ModelRotation.X0_Y0)
         {
-            return p_178415_3_;
+            return vertexIndex;
         }
         else
         {
-            this.func_178406_a(p_178415_1_, new Vector3d(0.5D, 0.5D, 0.5D), p_178415_4_.func_177525_a(), new Vector3d(1.0D, 1.0D, 1.0D));
-            return p_178415_4_.func_177520_a(p_178415_2_, p_178415_3_);
+            this.func_178406_a(position, new Vector3d(0.5D, 0.5D, 0.5D), modelRotationIn.func_177525_a(), new Vector3d(1.0D, 1.0D, 1.0D));
+            return modelRotationIn.func_177520_a(facing, vertexIndex);
         }
     }
 
-    private void func_178406_a(Vector3d p_178406_1_, Vector3d p_178406_2_, Matrix4d p_178406_3_, Vector3d p_178406_4_)
+    private void func_178406_a(Vector3d position, Vector3d rotationOrigin, Matrix4d rotationMatrix, Vector3d scale)
     {
-        p_178406_1_.sub(p_178406_2_);
-        p_178406_3_.transform(p_178406_1_);
-        p_178406_1_.x *= p_178406_4_.x;
-        p_178406_1_.y *= p_178406_4_.y;
-        p_178406_1_.z *= p_178406_4_.z;
-        p_178406_1_.add(p_178406_2_);
+        position.sub(rotationOrigin);
+        rotationMatrix.transform(position);
+        position.x *= scale.x;
+        position.y *= scale.y;
+        position.z *= scale.z;
+        position.add(rotationOrigin);
     }
 
     private Matrix4d func_178416_a(AxisAngle4d p_178416_1_)
@@ -207,7 +207,7 @@ public class FaceBakery
         var6.cross(var5, var4);
         var6.normalize();
         EnumFacing var7 = null;
-        float var8 = 0.0F;
+        float var8 = 0.719F;
         EnumFacing[] var9 = EnumFacing.values();
         int var10 = var9.length;
 
@@ -257,21 +257,21 @@ public class FaceBakery
         int var6;
         float var9;
 
-        for (int var5 = 0; var5 < 4; ++var5)
+        for (int var17 = 0; var17 < 4; ++var17)
         {
-            var6 = 7 * var5;
-            float var7 = Float.intBitsToFloat(var3[var6]);
-            float var8 = Float.intBitsToFloat(var3[var6 + 1]);
+            var6 = 7 * var17;
+            float var18 = Float.intBitsToFloat(var3[var6]);
+            float var19 = Float.intBitsToFloat(var3[var6 + 1]);
             var9 = Float.intBitsToFloat(var3[var6 + 2]);
 
-            if (var7 < var4[EnumFaceing.Constants.field_179176_f])
+            if (var18 < var4[EnumFaceing.Constants.field_179176_f])
             {
-                var4[EnumFaceing.Constants.field_179176_f] = var7;
+                var4[EnumFaceing.Constants.field_179176_f] = var18;
             }
 
-            if (var8 < var4[EnumFaceing.Constants.field_179178_e])
+            if (var19 < var4[EnumFaceing.Constants.field_179178_e])
             {
-                var4[EnumFaceing.Constants.field_179178_e] = var8;
+                var4[EnumFaceing.Constants.field_179178_e] = var19;
             }
 
             if (var9 < var4[EnumFaceing.Constants.field_179177_d])
@@ -279,14 +279,14 @@ public class FaceBakery
                 var4[EnumFaceing.Constants.field_179177_d] = var9;
             }
 
-            if (var7 > var4[EnumFaceing.Constants.field_179180_c])
+            if (var18 > var4[EnumFaceing.Constants.field_179180_c])
             {
-                var4[EnumFaceing.Constants.field_179180_c] = var7;
+                var4[EnumFaceing.Constants.field_179180_c] = var18;
             }
 
-            if (var8 > var4[EnumFaceing.Constants.field_179179_b])
+            if (var19 > var4[EnumFaceing.Constants.field_179179_b])
             {
-                var4[EnumFaceing.Constants.field_179179_b] = var8;
+                var4[EnumFaceing.Constants.field_179179_b] = var19;
             }
 
             if (var9 > var4[EnumFaceing.Constants.field_179181_a])
@@ -295,18 +295,18 @@ public class FaceBakery
             }
         }
 
-        EnumFaceing var17 = EnumFaceing.func_179027_a(p_178408_2_);
+        EnumFaceing var171 = EnumFaceing.func_179027_a(p_178408_2_);
 
         for (var6 = 0; var6 < 4; ++var6)
         {
-            int var18 = 7 * var6;
-            EnumFaceing.VertexInformation var19 = var17.func_179025_a(var6);
-            var9 = var4[var19.field_179184_a];
-            float var10 = var4[var19.field_179182_b];
-            float var11 = var4[var19.field_179183_c];
-            p_178408_1_[var18] = Float.floatToRawIntBits(var9);
-            p_178408_1_[var18 + 1] = Float.floatToRawIntBits(var10);
-            p_178408_1_[var18 + 2] = Float.floatToRawIntBits(var11);
+            int var181 = 7 * var6;
+            EnumFaceing.VertexInformation var191 = var171.func_179025_a(var6);
+            var9 = var4[var191.field_179184_a];
+            float var10 = var4[var191.field_179182_b];
+            float var11 = var4[var191.field_179183_c];
+            p_178408_1_[var181] = Float.floatToRawIntBits(var9);
+            p_178408_1_[var181 + 1] = Float.floatToRawIntBits(var10);
+            p_178408_1_[var181 + 2] = Float.floatToRawIntBits(var11);
 
             for (int var12 = 0; var12 < 4; ++var12)
             {
@@ -317,8 +317,8 @@ public class FaceBakery
 
                 if (MathHelper.func_180185_a(var9, var14) && MathHelper.func_180185_a(var10, var15) && MathHelper.func_180185_a(var11, var16))
                 {
-                    p_178408_1_[var18 + 4] = var3[var13 + 4];
-                    p_178408_1_[var18 + 4 + 1] = var3[var13 + 4 + 1];
+                    p_178408_1_[var181 + 4] = var3[var13 + 4];
+                    p_178408_1_[var181 + 4 + 1] = var3[var13 + 4 + 1];
                 }
             }
         }
@@ -389,7 +389,6 @@ public class FaceBakery
     static final class SwitchEnumFacing
     {
         static final int[] field_178400_a;
-
         static final int[] field_178399_b = new int[EnumFacing.Axis.values().length];
         private static final String __OBFID = "CL_00002489";
 

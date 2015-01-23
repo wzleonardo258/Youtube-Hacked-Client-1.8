@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.src.BlockPosM;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumParticleTypes;
@@ -305,15 +306,16 @@ public class WorldClient extends World
         Random var5 = new Random();
         ItemStack var6 = this.mc.thePlayer.getHeldItem();
         boolean var7 = this.mc.playerController.func_178889_l() == WorldSettings.GameType.CREATIVE && var6 != null && Block.getBlockFromItem(var6.getItem()) == Blocks.barrier;
+        BlockPosM blockPosM = new BlockPosM(0, 0, 0, 3);
 
         for (int var8 = 0; var8 < 1000; ++var8)
         {
             int var9 = p_73029_1_ + this.rand.nextInt(var4) - this.rand.nextInt(var4);
             int var10 = p_73029_2_ + this.rand.nextInt(var4) - this.rand.nextInt(var4);
             int var11 = p_73029_3_ + this.rand.nextInt(var4) - this.rand.nextInt(var4);
-            BlockPos var12 = new BlockPos(var9, var10, var11);
-            IBlockState var13 = this.getBlockState(var12);
-            var13.getBlock().randomDisplayTick(this, var12, var13, var5);
+            blockPosM.setXyz(var9, var10, var11);
+            IBlockState var13 = this.getBlockState(blockPosM);
+            var13.getBlock().randomDisplayTick(this, blockPosM, var13, var5);
 
             if (var7 && var13.getBlock() == Blocks.barrier)
             {

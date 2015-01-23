@@ -2,8 +2,8 @@ package net.minecraft.client.gui;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.UnmodifiableIterator;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import net.minecraft.block.Block;
@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.src.Lagometer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
@@ -45,6 +46,7 @@ public class GuiOverlayDebug extends Gui
         this.func_180798_a();
         this.func_175239_b(scaledResolutionIn);
         GlStateManager.popMatrix();
+        Lagometer.showLagometer(scaledResolutionIn);
         this.mc.mcProfiler.endSection();
     }
 
@@ -129,9 +131,9 @@ public class GuiOverlayDebug extends Gui
 
             if (this.mc.theWorld != null && this.mc.theWorld.isBlockLoaded(var1))
             {
-                Chunk var6 = this.mc.theWorld.getChunkFromBlockCoords(var1);
-                var5.add("Biome: " + var6.getBiome(var1, this.mc.theWorld.getWorldChunkManager()).biomeName);
-                var5.add("Light: " + var6.setLight(var1, 0) + " (" + var6.getLightFor(EnumSkyBlock.SKY, var1) + " sky, " + var6.getLightFor(EnumSkyBlock.BLOCK, var1) + " block)");
+                Chunk var9 = this.mc.theWorld.getChunkFromBlockCoords(var1);
+                var5.add("Biome: " + var9.getBiome(var1, this.mc.theWorld.getWorldChunkManager()).biomeName);
+                var5.add("Light: " + var9.setLight(var1, 0) + " (" + var9.getLightFor(EnumSkyBlock.SKY, var1) + " sky, " + var9.getLightFor(EnumSkyBlock.BLOCK, var1) + " block)");
                 DifficultyInstance var7 = this.mc.theWorld.getDifficultyForLocation(var1);
 
                 if (this.mc.isIntegratedServerRunning() && this.mc.getIntegratedServer() != null)
@@ -154,8 +156,8 @@ public class GuiOverlayDebug extends Gui
 
             if (this.mc.objectMouseOver != null && this.mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && this.mc.objectMouseOver.func_178782_a() != null)
             {
-                BlockPos var9 = this.mc.objectMouseOver.func_178782_a();
-                var5.add(String.format("Looking at: %d %d %d", new Object[] {Integer.valueOf(var9.getX()), Integer.valueOf(var9.getY()), Integer.valueOf(var9.getZ())}));
+                BlockPos var91 = this.mc.objectMouseOver.func_178782_a();
+                var5.add(String.format("Looking at: %d %d %d", new Object[] {Integer.valueOf(var91.getX()), Integer.valueOf(var91.getY()), Integer.valueOf(var91.getZ())}));
             }
 
             return var5;
@@ -191,7 +193,7 @@ public class GuiOverlayDebug extends Gui
                 Entry var13;
                 String var14;
 
-                for (Iterator var12 = var11.getProperties().entrySet().iterator(); var12.hasNext(); var9.add(((IProperty)var13.getKey()).getName() + ": " + var14))
+                for (UnmodifiableIterator var12 = var11.getProperties().entrySet().iterator(); var12.hasNext(); var9.add(((IProperty)var13.getKey()).getName() + ": " + var14))
                 {
                     var13 = (Entry)var12.next();
                     var14 = ((Comparable)var13.getValue()).toString();

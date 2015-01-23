@@ -121,33 +121,33 @@ public class ThreadDownloadImageData extends SimpleTexture
                     var1.setDoOutput(false);
                     var1.connect();
 
-                    if (var1.getResponseCode() / 100 == 2)
+                    if (var1.getResponseCode() / 100 != 2)
                     {
-                        BufferedImage var2;
-
-                        if (ThreadDownloadImageData.this.field_152434_e != null)
-                        {
-                            FileUtils.copyInputStreamToFile(var1.getInputStream(), ThreadDownloadImageData.this.field_152434_e);
-                            var2 = ImageIO.read(ThreadDownloadImageData.this.field_152434_e);
-                        }
-                        else
-                        {
-                            var2 = TextureUtil.func_177053_a(var1.getInputStream());
-                        }
-
-                        if (ThreadDownloadImageData.this.imageBuffer != null)
-                        {
-                            var2 = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(var2);
-                        }
-
-                        ThreadDownloadImageData.this.setBufferedImage(var2);
                         return;
                     }
+
+                    BufferedImage var2;
+
+                    if (ThreadDownloadImageData.this.field_152434_e != null)
+                    {
+                        FileUtils.copyInputStreamToFile(var1.getInputStream(), ThreadDownloadImageData.this.field_152434_e);
+                        var2 = ImageIO.read(ThreadDownloadImageData.this.field_152434_e);
+                    }
+                    else
+                    {
+                        var2 = TextureUtil.func_177053_a(var1.getInputStream());
+                    }
+
+                    if (ThreadDownloadImageData.this.imageBuffer != null)
+                    {
+                        var2 = ThreadDownloadImageData.this.imageBuffer.parseUserSkin(var2);
+                    }
+
+                    ThreadDownloadImageData.this.setBufferedImage(var2);
                 }
                 catch (Exception var6)
                 {
                     ThreadDownloadImageData.logger.error("Couldn\'t download http texture", var6);
-                    return;
                 }
                 finally
                 {

@@ -306,7 +306,7 @@ public class Block
     /**
      * Sets how much light is blocked going through this block. Returns the object for convenience in constructing.
      */
-    protected Block setLightOpacity(int opacity)
+    public Block setLightOpacity(int opacity)
     {
         this.lightOpacity = opacity;
         return this;

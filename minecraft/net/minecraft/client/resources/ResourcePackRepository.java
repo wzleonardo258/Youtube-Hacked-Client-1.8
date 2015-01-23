@@ -193,6 +193,7 @@ public class ResourcePackRepository
 
         final File var4 = new File(this.field_148534_e, var3);
         this.field_177321_h.lock();
+        ListenableFuture var9;
 
         try
         {
@@ -246,13 +247,14 @@ public class ResourcePackRepository
                     var8.setException(p_onFailure_1_);
                 }
             });
-            ListenableFuture var9 = this.field_177322_i;
-            return var9;
+            var9 = this.field_177322_i;
         }
         finally
         {
             this.field_177321_h.unlock();
         }
+
+        return var9;
     }
 
     public ListenableFuture func_177319_a(File p_177319_1_)

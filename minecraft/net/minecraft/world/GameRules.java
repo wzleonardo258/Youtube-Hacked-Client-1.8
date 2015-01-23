@@ -110,7 +110,7 @@ public class GameRules
      */
     public String[] getRules()
     {
-        return (String[])this.theGameRules.keySet().toArray(new String[0]);
+        return (String[])((String[])this.theGameRules.keySet().toArray(new String[0]));
     }
 
     /**
@@ -145,6 +145,22 @@ public class GameRules
         public void setValue(String value)
         {
             this.valueString = value;
+
+            if (value != null)
+            {
+                if (value.equals("false"))
+                {
+                    this.valueBoolean = false;
+                    return;
+                }
+
+                if (value.equals("true"))
+                {
+                    this.valueBoolean = true;
+                    return;
+                }
+            }
+
             this.valueBoolean = Boolean.parseBoolean(value);
             this.valueInteger = this.valueBoolean ? 1 : 0;
 
@@ -190,13 +206,14 @@ public class GameRules
 
     public static enum ValueType
     {
-        ANY_VALUE("ANY_VALUE", 0),
-        BOOLEAN_VALUE("BOOLEAN_VALUE", 1),
-        NUMERICAL_VALUE("NUMERICAL_VALUE", 2);
-
+        ANY_VALUE("ANY_VALUE", 0, "ANY_VALUE", 0),
+        BOOLEAN_VALUE("BOOLEAN_VALUE", 1, "BOOLEAN_VALUE", 1),
+        NUMERICAL_VALUE("NUMERICAL_VALUE", 2, "NUMERICAL_VALUE", 2);
         private static final GameRules.ValueType[] $VALUES = new GameRules.ValueType[]{ANY_VALUE, BOOLEAN_VALUE, NUMERICAL_VALUE};
         private static final String __OBFID = "CL_00002151";
 
-        private ValueType(String p_i45750_1_, int p_i45750_2_) {}
+        private static final GameRules.ValueType[] $VALUES$ = new GameRules.ValueType[]{ANY_VALUE, BOOLEAN_VALUE, NUMERICAL_VALUE};
+
+        private ValueType(String p_i46375_1_, int p_i46375_2_, String p_i45750_1_, int p_i45750_2_) {}
     }
 }
