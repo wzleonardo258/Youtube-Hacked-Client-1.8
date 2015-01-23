@@ -1,5 +1,7 @@
 package net.minecraft.client.entity;
 
+import me.lordethan.cryton.Cryton;
+import me.lordethan.cryton.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -134,6 +136,12 @@ public class EntityPlayerSP extends AbstractClientPlayer
     {
         if (this.worldObj.isBlockLoaded(new BlockPos(this.posX, 0.0D, this.posZ)))
         {
+        	//TODO:Cryton
+        	for(Module m : Cryton.theClient.moduleManager.activeModules){
+        			m.onUpdate();
+        	}
+        	//TODO:END
+        	
             super.onUpdate();
 
             if (this.isRiding())
